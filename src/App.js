@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './App.css';
 
 class App extends Component {
+
   render() {
     console.log("Prop: ", this.props)
     return (
@@ -15,10 +16,10 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <h3> Here are some numbers {this.props.propNumber}</h3>
-        <h3> Here are some numbers {this.props.propString}</h3>
-  <h3> Here are some numbers {this.props.propObject.obj1}</h3>
-  <h3> Here are some numbers {this.props.propObject.obj2}</h3>
+        <h5> Here are some numbers {this.props.propNumber}</h5>
+        <h5> Here are some numbers {this.props.propString}</h5>
+  <h5> Here are some numbers {this.props.propObject.obj1}</h5>
+  <h5> Here are some numbers {this.props.propObject.obj2}</h5>
   <h3> Here are some numbers {this.props.propObject.obj3}</h3>
   <h3> Here are some numbers {this.props.propObject.obj4}</h3>
         <Parent />
@@ -28,14 +29,30 @@ class App extends Component {
 }
 
 class Parent extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      cars: ['dodge', 'camry', 'audi', 'hummer']
+    };
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick() {
+    console.log("Clicked")
+    this.setState({cars: this.state.cars.reverse()})
+  }
+
   render(){
     return(
       <div>
-        <h1>Text from the parent: </h1>
+        <h1 onClick={this.handleClick}>Text from the parent: Click to reverse.</h1>
         <Cars
           msg="I can do it!"
           richard="I am Richard! :-)"
-          coolCars={this.props.cars}
+          coolCars={this.state.cars.map((item, i) => {
+            console.log("coolCars: ", item)
+            return <p key={i}>{item}</p> ;
+          })}
           />
       </div>
     );
@@ -61,16 +78,19 @@ App.defaultProps = {
 }
 
 class Cars extends Component {
+
+
+
   render(){
     console.log("Cars: ", this.props);
     return(
       <div>
-        <h3>I am from the "Cars" component! </h3>
+        <h3 >I am from the "Cars" component! </h3>
         <p>{this.props.msg}</p>
         <p>{this.props.richard}</p>
-        <p>{this.props.coolCars.map((item,i)=>{
-            return i+": "+ item ;
-          })}</p>
+        <div>{this.props.coolCars.map((item,i)=>{
+            return <div key={i}>{item}</div> ;
+          })}</div>
       </div>
     );
   }
